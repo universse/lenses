@@ -1,0 +1,283 @@
+@import 'theme';
+@import 'typography';
+@import 'variables';
+@import 'reset';
+
+@import 'carousel';
+@import 'figma';
+@import 'list';
+@import 'icons';
+@import 'picker';
+@import 'radio';
+@import 'sliders';
+@import 'switch';
+
+:root {
+  // background
+  --background-primary: var(--color-10);
+  --background-secondary: var(--color-30);
+  // --background-contrast: var(--color-50);
+  --background-accent: var(--accent);
+
+  // text
+  --text-primary: var(--color-90);
+  // --text-secondary: var(--color-50);
+  --text-contrast: var(--color-10);
+  --text-accent: var(--accent);
+}
+
+::selection {
+  background-color: var(--accent);
+  color: var(--text-contrast);
+}
+
+input[type='email'],
+input[type='text'],
+input[type='url'] {
+  &::placeholder {
+    // color: var(--black600);
+    opacity: 0.65;
+  }
+
+  &:invalid {
+    // box-shadow: var(--input-invalid);
+  }
+}
+
+.focus-visible,
+
+// for visually-hidden input
+.focus-visible + label {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+[disabled] {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+%base {
+  padding: 0 2rem;
+  width: 100%;
+}
+
+%landmark {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  margin: 0 auto;
+}
+
+header {
+  height: 6rem;
+  width: 100%;
+  z-index: 200;
+
+  & > div {
+    @extend %landmark;
+  }
+}
+
+#___gatsby {
+  background-color: var(--background-primary);
+  color: var(--text-primary);
+}
+
+a,
+button,
+input {
+  color: inherit;
+}
+
+a {
+  svg {
+    fill: var(--text-primary);
+  }
+
+  &:hover {
+    background-color: var(--background-accent);
+    color: var(--text-contrast);
+
+    svg {
+      fill: var(--text-contrast);
+    }
+  }
+}
+
+.View {
+  display: flex;
+  justify-content: space-between;
+  min-height: calc(100vh - 6rem);
+  padding: 0 2rem;
+}
+
+.SideNav {
+  align-self: start;
+  flex: 0 0 16rem;
+  position: sticky;
+  top: 0;
+
+  nav {
+    height: calc(100vh - 6rem);
+    margin: -5px 0 0 -5px;
+    padding: 5px 0 0 5px;
+  }
+
+  li {
+    margin-bottom: 2.5rem;
+  }
+
+  a ~ ul {
+    margin-left: 1.5rem;
+    margin-top: 1rem;
+
+    li {
+      margin-bottom: 1rem;
+    }
+  }
+
+  a {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+  }
+}
+
+.ThemingSidebar {
+  $top: 2rem;
+
+  align-self: start;
+  flex: 0 0 16rem;
+  height: 100vh;
+  margin-top: $top;
+  padding-left: 2rem;
+  position: sticky;
+  top: $top;
+}
+
+.Palette {
+  text-align: center;
+
+  & > li {
+    margin-bottom: 2rem;
+  }
+
+  ul {
+    ul {
+      display: flex;
+
+      li {
+        flex: 1 1 3rem;
+        margin: 0 0.25rem 0.25rem 0;
+      }
+    }
+  }
+
+  span {
+    line-height: 3rem;
+  }
+}
+
+// utilities
+.serif {
+  font-family: 'Spectral', 'Georgia', 'Times New Roman', 'Times', serif;
+}
+
+.rtl {
+  direction: rtl;
+}
+
+footer {
+  bottom: 0;
+  height: 6rem;
+  width: 100%;
+
+  & > div {
+    @extend %base;
+    @extend %landmark;
+  }
+
+  span {
+    font-size: 1rem;
+  }
+}
+
+// h1 {
+//   font-size: token('font-size.20');
+//   line-height: 3rem;
+// }
+
+// h2 {
+//   font-size: 1.5rem;
+//   letter-spacing: -0.75px;
+//   line-height: 2rem;
+// }
+
+h3 {
+  letter-spacing: -0.25px;
+}
+
+// h4 {
+//   font-size: 0.8125rem;
+//   font-weight: 500;
+//   letter-spacing: -0.25px;
+//   line-height: 1rem;
+// }
+
+p {
+  font-size: 1.3125rem;
+  line-height: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+blockquote {
+  $margin: 1.5rem;
+  $border: 0.25rem;
+
+  border-left: $border solid var(--black800);
+  font-style: italic;
+  margin-left: -$margin;
+  padding-left: $margin - $border;
+
+  @media #{$nonDesktop} {
+    $margin: 1rem;
+    $border: 0.1875rem;
+
+    border-left: $border solid var(--black800);
+    margin-left: -$margin;
+    padding-left: $margin - $border;
+  }
+
+  p {
+    color: var(--black800);
+  }
+}
+
+time {
+  color: var(--black800);
+  display: block;
+  font-size: 1.1875rem;
+  line-height: 1.75rem;
+  margin: 0.25rem 0 4rem;
+}
+
+strong {
+  font-weight: 700;
+}
+
+em {
+  font-style: italic;
+}

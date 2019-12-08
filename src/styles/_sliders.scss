@@ -1,0 +1,86 @@
+input[type='range'] {
+  appearance: none;
+  background-color: var(--background-secondary);
+  border-radius: 9999px;
+  cursor: pointer;
+  height: 0.3125rem;
+  width: 100%;
+
+  @mixin knob {
+    background-color: var(--color);
+    border: 0.125rem solid var(--background-primary);
+    border-radius: 9999px;
+  }
+
+  &::-moz-range-thumb {
+    @include knob;
+  }
+
+  &::-webkit-slider-thumb {
+    @include knob;
+
+    appearance: none;
+  }
+}
+
+.Slider {
+  $moz: 0.875rem;
+  $webkit: $moz + 0.25rem;
+
+  &::-moz-range-thumb {
+    height: $moz;
+    width: $moz;
+  }
+
+  &::-webkit-slider-thumb {
+    height: $webkit;
+    width: $webkit;
+  }
+}
+
+.PaletteSlider {
+  background-image: linear-gradient(
+    to right,
+    #ed4074,
+    #b57539,
+    #8d8638,
+    #559338,
+    #3b9278,
+    #3e8f95,
+    #428abc,
+    #a067e5,
+    #db43c0,
+    #ed4074
+  );
+}
+
+.PalettePage {
+  background-color: var(--background-primary);
+  height: 3rem;
+  margin: -1rem 0.25rem 1.5rem 0;
+
+  div {
+    display: contents;
+  }
+
+  h3 {
+    @extend .visually-hidden;
+  }
+
+  input {
+    $moz: 1.5rem;
+    $webkit: $moz + 0.25rem;
+
+    height: 0.75rem;
+
+    &::-moz-range-thumb {
+      height: $moz;
+      width: $moz;
+    }
+
+    &::-webkit-slider-thumb {
+      height: $webkit;
+      width: $webkit;
+    }
+  }
+}

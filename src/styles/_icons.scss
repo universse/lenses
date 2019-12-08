@@ -1,0 +1,75 @@
+.IconButton {
+  $height: 3rem;
+  $width: 2.5rem;
+
+  align-items: center;
+  color: var(--gray600);
+  display: flex;
+  height: $height;
+  justify-content: center;
+  position: relative;
+  width: $width;
+  z-index: 1;
+
+  &::before {
+    border-radius: 9999px;
+    content: '';
+    height: $width;
+    left: 0;
+    position: absolute;
+    top: ($height - $width) / 2;
+    width: $width;
+    z-index: -1;
+  }
+
+  &.light {
+    color: var(--white900);
+  }
+
+  @media #{$desktop} {
+    &:hover::before {
+      background-color: var(--gray200);
+    }
+
+    &.light:hover::before {
+      background-color: var(--white100);
+    }
+  }
+
+  &:active::before {
+    background-color: var(--gray400);
+  }
+
+  &.light:active::before {
+    background-color: var(--white300);
+  }
+}
+
+.feather {
+  fill: none;
+  height: 24px;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2;
+  width: 24px;
+
+  &.filled {
+    fill: currentColor;
+  }
+
+  &.small {
+    height: 16px;
+    width: 16px;
+  }
+
+  &.medium {
+    height: 20px;
+    width: 20px;
+  }
+
+  &.large {
+    height: 28px;
+    width: 28px;
+  }
+}

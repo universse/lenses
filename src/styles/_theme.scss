@@ -1,0 +1,12 @@
+// :root {
+//   --black800: rgba(0, 0, 0, 0.7);
+//   --black900: rgba(0, 0, 0, 0.87);
+//   --white100: rgba(255, 255, 255, 0.15);
+//   --white300: rgba(255, 255, 255, 0.35);
+//   --white900: rgba(255, 255, 255, 0.9);
+//   --input-focused: 0 0 0 4px var(--accent);
+// }
+
+$max-width: 44rem;
+
+$nonDesktop: 'screen and (max-width: #{$max-width})';

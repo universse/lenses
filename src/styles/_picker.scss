@@ -1,0 +1,43 @@
+.ColorPlayground {
+  input {
+    background-color: transparent;
+    padding: 0.5rem 0;
+  }
+
+  input[type='text'] {
+    border-bottom: 2px solid var(--color-40);
+  }
+
+  input[type='number'] {
+    appearance: textfield;
+    border-bottom: 3px dotted var(--color-40);
+
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  }
+}
+
+.Shades {
+  flex: 1 1 auto;
+
+  li {
+    height: 3.5rem;
+
+    & > div {
+      flex: 0 0 auto;
+    }
+  }
+}
+
+.Edit,
+.Add {
+  flex: 0 0 10rem;
+  margin-right: 4rem;
+}
+
+.Add + .Shades {
+  opacity: 0.5;
+}

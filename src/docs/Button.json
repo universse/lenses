@@ -1,0 +1,4 @@
+{
+  "data": "{\"description\":\"\",\"displayName\":\"Button\",\"methods\":[],\"props\":{\"aria-label\":{\"type\":{\"name\":\"string\"},\"required\":true,\"description\":\"\"},\"onClick\":{\"type\":{\"name\":\"func\"},\"required\":true,\"description\":\"\"},\"children\":{\"type\":{\"name\":\"node\"},\"required\":false,\"description\":\"\",\"defaultValue\":{\"value\":\"'Button'\",\"computed\":false}}},\"componentName\":\"Button\"}",
+  "componentName": "Button"
+}

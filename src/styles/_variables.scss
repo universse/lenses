@@ -1,0 +1,17 @@
+$base-font-size: 16px;
+// $bottom-bar-height: 3.5rem;
+// $header-height: 4rem;
+// $mobile-header-height: 3.5rem;
+// $mobile-progress-bar-height: 2.25rem;
+
+// $accent500: #006dfc;
+// $danger: #da4453;
+
+$mobile-width: 37.5rem;
+$desktop-width: 58rem;
+
+$desktop: 'screen and (min-width: #{$desktop-width})';
+$non-desktop: 'screen and (max-width: #{$desktop-width})';
+$mobile: 'screen and (max-width: #{$mobile-width})';
+$non-mobile: 'screen and (min-width: #{$mobile-width})';
+$tablet: 'screen and (min-width: #{$mobile-width}) and (max-width: #{$desktop-width})';

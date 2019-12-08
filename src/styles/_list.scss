@@ -1,0 +1,51 @@
+.List {
+  li {
+    align-items: center;
+    color: var(--color-85);
+    display: flex;
+    height: var(--list-item-height);
+
+    &:nth-child(odd) {
+      background-color: var(--color-20);
+    }
+
+    &:nth-child(even) {
+      background-color: var(--color-30);
+    }
+  }
+}
+
+.Table {
+  width: 100%;
+
+  tr {
+    height: var(--list-item-height);
+  }
+
+  th {
+    text-transform: capitalize;
+  }
+
+  td,
+  th {
+    vertical-align: middle;
+  }
+
+  thead tr {
+    background-color: var(--color-70);
+    color: var(--color-10);
+    text-align: left;
+  }
+
+  tbody tr {
+    color: var(--color-90);
+
+    &:nth-child(odd) {
+      background-color: var(--color-20);
+    }
+
+    &:nth-child(even) {
+      background-color: var(--color-30);
+    }
+  }
+}

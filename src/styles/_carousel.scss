@@ -1,0 +1,19 @@
+.Carousel {
+  align-items: center;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+
+  button {
+    position: absolute;
+  }
+
+  ul {
+    display: flex;
+  }
+
+  img {
+    // height: 100%;
+    width: 100%;
+  }
+}

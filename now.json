@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "build": {
+    "env": {
+      "FIREBASE_FUNCTIONS": "@firebase_functions"
+    }
+  }
+}

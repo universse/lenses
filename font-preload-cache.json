@@ -1,0 +1,53 @@
+{
+  "timestamp": 1574664227740,
+  "hash": "f7e31c4e8ae5f9261755562679a5e6ae",
+  "assets": {
+    "/dev-404-page": {
+      "/static/RobotoMono-Regular-0c94e034ca06357576c2d03d623e1fcd.woff2": true,
+      "/static/RobotoMono-Medium-6221bb5e9ca6f51a91ebcbe89ad10361.woff2": true,
+      "/static/RobotoMono-Bold-73491684849da6c94511623a2f5ae93d.woff2": true
+    },
+    "/404.html": {
+      "/static/RobotoMono-Regular-0c94e034ca06357576c2d03d623e1fcd.woff2": true,
+      "/static/RobotoMono-Medium-6221bb5e9ca6f51a91ebcbe89ad10361.woff2": true,
+      "/static/RobotoMono-Bold-73491684849da6c94511623a2f5ae93d.woff2": true
+    },
+    "/404/": {
+      "/static/RobotoMono-Regular-0c94e034ca06357576c2d03d623e1fcd.woff2": true,
+      "/static/RobotoMono-Medium-6221bb5e9ca6f51a91ebcbe89ad10361.woff2": true,
+      "/static/RobotoMono-Bold-73491684849da6c94511623a2f5ae93d.woff2": true
+    },
+    "/color-playground/": {
+      "/static/RobotoMono-Regular-0c94e034ca06357576c2d03d623e1fcd.woff2": true,
+      "/static/RobotoMono-Medium-6221bb5e9ca6f51a91ebcbe89ad10361.woff2": true,
+      "/static/RobotoMono-Bold-73491684849da6c94511623a2f5ae93d.woff2": true
+    },
+    "/color/": {
+      "/static/RobotoMono-Regular-0c94e034ca06357576c2d03d623e1fcd.woff2": true,
+      "/static/RobotoMono-Medium-6221bb5e9ca6f51a91ebcbe89ad10361.woff2": true,
+      "/static/RobotoMono-Bold-73491684849da6c94511623a2f5ae93d.woff2": true
+    },
+    "/data-table/": {
+      "/static/RobotoMono-Regular-0c94e034ca06357576c2d03d623e1fcd.woff2": true,
+      "/static/RobotoMono-Medium-6221bb5e9ca6f51a91ebcbe89ad10361.woff2": true,
+      "/static/RobotoMono-Bold-73491684849da6c94511623a2f5ae93d.woff2": true
+    },
+    "/data-visualization/": {
+      "/static/RobotoMono-Regular-0c94e034ca06357576c2d03d623e1fcd.woff2": true,
+      "/static/RobotoMono-Medium-6221bb5e9ca6f51a91ebcbe89ad10361.woff2": true,
+      "/static/RobotoMono-Bold-73491684849da6c94511623a2f5ae93d.woff2": true
+    },
+    "/palette/": {
+      "/static/RobotoMono-Regular-0c94e034ca06357576c2d03d623e1fcd.woff2": true,
+      "/static/RobotoMono-Medium-6221bb5e9ca6f51a91ebcbe89ad10361.woff2": true,
+      "/static/RobotoMono-Bold-73491684849da6c94511623a2f5ae93d.woff2": true
+    },
+    "/react": {
+      "/static/RobotoMono-Regular-0c94e034ca06357576c2d03d623e1fcd.woff2": true,
+      "/static/RobotoMono-Bold-73491684849da6c94511623a2f5ae93d.woff2": true
+    },
+    "/figma/": {
+      "/static/RobotoMono-Regular-0c94e034ca06357576c2d03d623e1fcd.woff2": true
+    }
+  }
+}

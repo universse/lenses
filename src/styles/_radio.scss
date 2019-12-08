@@ -1,0 +1,61 @@
+%common {
+  border-radius: 9999px;
+  content: '';
+  display: block;
+  position: absolute;
+}
+
+input.Radio {
+  & + label {
+    cursor: pointer;
+    padding-left: 1.5rem;
+
+    &::before {
+      @extend %common;
+
+      border: 0.125rem solid var(--color);
+      height: 1.125rem;
+      left: 0;
+      width: 1.125rem;
+    }
+  }
+
+  &:checked + label::after {
+    @extend %common;
+
+    background-color: var(--color);
+    height: 0.625rem;
+    left: 0.25rem;
+    width: 0.625rem;
+  }
+}
+
+.ColorOption {
+  height: 1.25rem;
+}
+
+input.Color {
+  & + label {
+    cursor: pointer;
+    font-size: 0;
+
+    &::before {
+      @extend %common;
+
+      display: block;
+      height: 1rem;
+      position: static;
+      width: 1rem;
+    }
+  }
+
+  &:checked + label::after {
+    @extend %common;
+
+    border: 0.1875rem solid var(--color);
+    height: 1.5rem;
+    left: -0.25rem;
+    top: -0.25rem;
+    width: 1.5rem;
+  }
+}

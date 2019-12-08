@@ -1,0 +1,26 @@
+input.Switch {
+  $knob-size: 1.25rem;
+  $switch-length: 2rem;
+
+  & + label {
+    background-color: var(--background-secondary);
+    cursor: pointer;
+    height: 1rem;
+    transition: background-color 0.15s ease-in-out;
+    width: $switch-length;
+
+    &::before {
+      background-color: var(--color-40);
+      border-radius: 9999px;
+      content: '';
+      height: $knob-size;
+      transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
+      width: $knob-size;
+    }
+  }
+
+  &:checked + label::before {
+    background-color: var(--color);
+    transform: translateX($switch-length - $knob-size);
+  }
+}
