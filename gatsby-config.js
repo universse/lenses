@@ -1,7 +1,8 @@
 const config = {
   siteMetadata: {
-    title: 'Lenses',
-    description: 'Through '
+    title: 'Through Another Lens',
+    shortTitle: 'Lenses',
+    description: 'Invisible Worlds'
   },
   plugins: [
     {

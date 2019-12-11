@@ -10,6 +10,14 @@
 
   header {
     flex: 0 0 2.5rem;
+
+    & > div > div:last-child {
+      right: 2.5rem;
+
+      @media #{$non-desktop} {
+        right: 1rem;
+      }
+    }
   }
 
   main {
@@ -18,19 +26,47 @@
 
   .InputWrapper {
     flex: 0 1 50%;
+
+    div {
+      left: 0.5rem;
+
+      @media #{$non-mobile} {
+        left: 1rem;
+      }
+    }
   }
 
   input[type='text'] {
     background-color: #f0f0f0;
     color: #000;
-    padding: 0 1rem 0 3rem;
+    padding: 0 0.75rem 0 2rem;
 
     &:focus {
       background-color: #fff;
     }
+
+    @media #{$non-mobile} {
+      padding: 0 1rem 0 3rem;
+    }
   }
 
   details {
+    summary {
+      span {
+        display: none;
+      }
+
+      @media #{$non-mobile} {
+        span {
+          display: block;
+        }
+
+        div:first-child {
+          display: none;
+        }
+      }
+    }
+
     & > div {
       background-color: #fff;
       box-shadow: var(--shadow-01);

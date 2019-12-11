@@ -1,14 +1,15 @@
-tweak lenses + more empathetic
-retinal detachment
-diabetic retinopathy + blur https://yoksel.github.io/svg-filters/#/presets/colored-stripes-vertical
-glare to outdoor environment
-disable device in figma simulation
+glare to outdoor environment https://css-tricks.com/look-svg-light-source-filters/
+launch figma stuffs
 
-open proto
+tweak lenses + more empathetic // design visualization
 
+<!-- retinal detachment -->
+<!-- diabetic retinopathy + blur https://yoksel.github.io/svg-filters/#/presets/colored-stripes-vertical -->
+
+<!-- open proto -->
 <!-- mousemove iframe -->
 
-export to stylint rules
+export to stylelint rules
 design linters
 automated contrast check for colorblind
 https://github.com/stylelint/stylelint/blob/master/docs/user-guide/plugins.md

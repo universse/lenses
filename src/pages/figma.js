@@ -6,7 +6,7 @@ import Tabs, { Simulation, Lenses } from 'components/Tabs'
 import Icon from 'components/Icon'
 import useDebouncedValue from 'hooks/useDebouncedValue'
 import useSiteMetadata from 'hooks/useSiteMetadata'
-import { FigmaLenses } from 'hooks/useThemeStore'
+import { FigmaSimulationControls, FigmaLenses } from 'hooks/useThemeStore'
 
 const FIGMA_REGEXP = /https:\/\/([\w.-]+\.)?figma.com\/(file|proto)\/([0-9a-zA-Z]{22,128})(?:\/.*)?$/
 const isFigma = url => url.match(FIGMA_REGEXP) || []
@@ -26,35 +26,44 @@ const FILE = 'file'
 
 const tabs = [
   { tab: 'lenses', Panel: Lenses, props: { lenses: FigmaLenses } },
-  { tab: 'simulation', Panel: Simulation, props: { isFigma: true } }
+  {
+    tab: 'simulation',
+    Panel: Simulation,
+    props: { controls: FigmaSimulationControls }
+  }
 ]
 
-export default function FigmaPage ({ location: { search } }) {
+export default function FigmaPage({ location: { search } }) {
   const [url, setUrl] = useState(() => new URLSearchParams(search).get('url'))
   const debouncedUrl = useDebouncedValue(url, 500)
-  const { title } = useSiteMetadata()
-
-  useEffect(() => {
-    debouncedUrl && navigate(`/figma?url=${encodeURIComponent(debouncedUrl)}`)
-  }, [debouncedUrl])
+  const { shortTitle } = useSiteMetadata()
 
   const decodedDebouncedUrl = decodeURIComponent(debouncedUrl)
 
   const [, , type] = isFigma(decodedDebouncedUrl)
+
+  useEffect(() => {
+    const url =
+      debouncedUrl && type
+        ? `/figma?url=${encodeURIComponent(debouncedUrl)}`
+        : '/figma'
+
+    navigate(url)
+  }, [debouncedUrl, type])
 
   return (
     <div className='flex flex-col' id='Figma'>
       <header>
         <div className='relative justify-center'>
           <div className='absolute' style={{ left: '13px' }}>
-            {/* <Link className='color-white' to='/figma'> */}
-            <span className='color-white'>{title}</span>
-            {/* </Link> */}
+            <Link className='color-white' to='/figma'>
+              {shortTitle}
+            </Link>
           </div>
           <div className='InputWrapper relative h-100'>
             <div
               className='absolute flex items-center h-100'
-              style={{ color: '#000', left: '1rem', top: '-0.0625rem' }}
+              style={{ color: '#000', top: '-0.0625rem' }}
             >
               <Icon icon='figma' size='medium' />
             </div>
@@ -67,12 +76,12 @@ export default function FigmaPage ({ location: { search } }) {
               value={type && decodeURIComponent(url)}
             />
           </div>
-          <div
-            className='absolute flex items-center h-100'
-            style={{ right: '2.5rem' }}
-          >
+          <div className='absolute flex items-center h-100'>
             <details>
               <summary className='color-white flex items-center fs-14'>
+                <div style={{ height: 24 }}>
+                  <Icon icon='lens' />
+                </div>
                 <span>Simulation</span>
                 <div className='ml-4' style={{ height: '1.25rem' }}>
                   <Icon icon='chevron-down' size='medium' />

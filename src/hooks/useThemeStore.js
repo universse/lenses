@@ -1,11 +1,14 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { renderToStaticMarkup } from 'react-dom/server'
 import create from 'zustand'
 import { get, set } from 'idb-keyval'
 import { hsluvToHex, hexToHsluv } from 'hsluv'
+// import rafSchd from 'raf-schd'
 // import chroma from 'chroma-js'
 // import produce from 'immer'
 
+// import { SectionTitle, RadioGroup, Slider, Switch } from 'components/Controls'
 import Colorblind from 'constants/Colorblind'
 import joinStrings from 'utils/classNames'
 import { clamp, hexToRgb } from 'utils/color'
@@ -196,19 +199,44 @@ export const DefaultSimulation = {
   [TREMBLING_INTENSITY]: 3
 }
 
-const Controls = {
-  //   [VIBRANCY]: [Slider, { max: '9', min: '0' }],
-  //   [MODE]: [RadioGroup, {}],
-  //   [SPACING]: [RadioGroup, {}],
-  //   [DYSLEXIA]: [Slider, {}],
-  //   [COLORBLIND]: [RadioGroup, {}],
-  //   [BLUR]: [Slider, { className: 'rtl', max: '5', min: '-5', step: '0.1' }],
-  //   [CONTRAST]: [Slider, { max: '185', min: '15' }],
-  //   [GHOSTING]: [Slider, { max: '8', min: '-8', step: '0.1' }],
-  //   [OPACITY]: [Slider, { className: 'rtl', max: '185', min: '15' }],
-  //   [BRIGHTNESS]: [Slider, { max: '400', min: '100', step: '10' }],
-  //   [DEVICE]: [RadioGroup, {}],
-  //   [TREMBLING_INTENSITY]: [Slider, { max: '12', min: '3' }]
+// Controls
+export const ThemingControls = [PaletteSlider, VIBRANCY, MODE, SPACING]
+
+export const FigmaSimulationControls = [
+  COLORBLIND,
+  BLUR,
+  CONTRAST,
+  GHOSTING,
+  OPACITY
+  // BRIGHTNESS
+]
+
+export const DefaultSimulationControls = [
+  COLORBLIND,
+  BLUR,
+  CONTRAST,
+  GHOSTING,
+  OPACITY,
+  // BRIGHTNESS,
+  SectionTitle,
+  DYSLEXIA,
+  DEVICE,
+  TREMBLING_INTENSITY
+]
+
+export const Controls = {
+  [VIBRANCY]: [Slider, { max: '9', min: '0' }],
+  [MODE]: [RadioGroup, {}],
+  [SPACING]: [RadioGroup, {}],
+  [DYSLEXIA]: [Switch, {}],
+  [COLORBLIND]: [RadioGroup, {}],
+  [BLUR]: [Slider, { className: 'rtl', max: '5', min: '-5', step: '0.1' }],
+  [CONTRAST]: [Slider, { max: '185', min: '15' }],
+  [GHOSTING]: [Slider, { max: '8', min: '-8', step: '0.1' }],
+  [OPACITY]: [Slider, { className: 'rtl', max: '185', min: '15' }],
+  [BRIGHTNESS]: [Slider, { max: '400', min: '100', step: '10' }],
+  [DEVICE]: [RadioGroup, {}],
+  [TREMBLING_INTENSITY]: [Slider, { max: '12', min: '3' }]
 }
 
 // --(hyperopia)
@@ -231,12 +259,12 @@ export const FigmaLenses = [
   NONE,
   FAR_SIGHTEDNESS,
   CATARACT,
-  // ELDERLY,
+  ELDERLY,
   BLINDNESS,
-
-  TOTAL_COLORBLINDNESS,
-  RED_GREEN_COLORBLINDNESS
+  RED_GREEN_COLORBLINDNESS,
+  TOTAL_COLORBLINDNESS
   // OUTDOOR_ENVIRONMENT,
+  // TREMBLING_HANDS
 ]
 
 export const LensesSettings = {
@@ -258,7 +286,7 @@ export const LensesSettings = {
   // add glare
   // [OUTDOOR_ENVIRONMENT]: { [BRIGHTNESS]: 200, [BLUR]: 0.5 },
 
-  [DYSLEXIA]: { [GHOSTING]: 6, [DYSLEXIA]: true },
+  [DYSLEXIA]: { [DYSLEXIA]: true },
 
   [MOTOR_IMPAIRMENT]: { [DEVICE]: KEYBOARD_ONLY },
   [TREMBLING_HANDS]: { [DEVICE]: HAND_TREMORS, [TREMBLING_INTENSITY]: 7 }
@@ -271,22 +299,26 @@ const [useThemeStore, { setState, subscribe, runEffect }] = create(
   withEffect(DefaultSimulation)
 )
 
-export const setTheme = (function () {
+export const setTheme = (function() {
   let eventTimeout
 
-  return function (theme) {
+  return function(theme) {
     clearTimeout(eventTimeout)
     setState(theme)
     eventTimeout = setTimeout(() => window.___log('set theme', theme), 650)
   }
 })()
 
-export const setLense = (function () {
+export const setLense = (function() {
   let eventTimeout
 
-  return function (lense) {
+  return function(lense) {
     clearTimeout(eventTimeout)
-    setState({ ...DefaultSimulation, ...LensesSettings[lense] })
+    setState({
+      ...DefaultSimulation,
+      ...LensesSettings[lense],
+      ...(window.location.pathname.startsWith('/figma') && { [DEVICE]: NONE })
+    })
     eventTimeout = setTimeout(() => window.___log('set lense', { lense }), 650)
   }
 })()
@@ -295,7 +327,7 @@ export const resetSimulation = () => setState(DefaultSimulation)
 
 let styleNode
 
-export function initializeTheming () {
+export function initializeTheming() {
   styleNode = document.body.appendChild(document.createElement('style'))
 
   // COLOR
@@ -344,8 +376,6 @@ export function initializeTheming () {
     })
   }, selectSpacing)
 
-  // setState(DefaultTheming)
-
   // DefaultTheming[MODE] = window.matchMedia('(prefers-color-scheme: dark)')
   //   .matches
   //   ? DARK
@@ -370,11 +400,11 @@ export function initializeTheming () {
     .catch(e => setState(DefaultTheming))
 }
 
-export function initializeSimulation () {
+export function initializeSimulation() {
   // ZOOM
   let lastZoom = window.devicePixelRatio
   let originalDevicePixel
-  window.addEventListener('focus', e => console.log(e.target))
+
   window.addEventListener('resize', () => {
     if (lastZoom === window.devicePixelRatio) return
 
@@ -390,23 +420,37 @@ export function initializeSimulation () {
     !devicePixel && set(key, originalDevicePixel)
   })
 
-  runEffect(dyslexia => dyslexia && simulateDyslexia(500), selectDyslexia)
+  runEffect(dyslexia => {
+    if (!dyslexia) return
+
+    const stopDyslexiaSimulation = simulateDyslexia(500)
+
+    let ghosting = 0
+
+    const timeoutId = setInterval(() => {
+      ghosting += 0.01
+      setState({ [GHOSTING]: ghosting })
+      Math.floor(ghosting) === 6 && clearTimeout(timeoutId)
+    }, 75)
+
+    return () => {
+      stopDyslexiaSimulation()
+      setState({ [GHOSTING]: DefaultSimulation[GHOSTING] })
+      clearTimeout(timeoutId)
+    }
+  }, selectDyslexia)
 
   // Filters
   createFilters()
   const [ghostingSourceBlur, ghostingOverlayBlur] = document.querySelectorAll(
     `#${GHOSTING} feGaussianBlur`
   )
-  const ghostingSourceOpacity = document.querySelector(
-    `#${GHOSTING} [result='source'] feFuncA`
-  )
+  const [
+    ghostingSourceOpacity,
+    ghostingOverlayOpacity
+  ] = document.querySelectorAll(`#${GHOSTING} feFuncA`)
+
   const ghostingOffset = document.querySelector(`#${GHOSTING} feOffset`)
-  // const ghostingOverlayBlur = document.querySelector(
-  //   `#${GHOSTING} feGaussianBlur`
-  // )
-  const ghostingOverlayOpacity = document.querySelector(
-    `#${GHOSTING} [result='overlay'] feFuncA`
-  )
 
   const filtersCSSNode = styleNode.appendChild(document.createTextNode(''))
   subscribe(
@@ -423,13 +467,13 @@ export function initializeSimulation () {
         )
         ghostingOverlayBlur.setAttribute(
           'stdDeviation',
-          clamp({ value: 0.75 * ghosting, max: 1.75 })
+          clamp({ value: 0.75 * ghosting, max: 1.5 })
         )
 
         // opacity
         ghostingSourceOpacity.setAttribute(
           'slope',
-          clamp({ value: 1 - ghosting * 0.02, min: 0.85 })
+          clamp({ value: 1 - ghosting * 0.02, min: 0.87 })
         )
         ghostingOverlayOpacity.setAttribute('slope', ghosting * 0.1)
 
@@ -459,7 +503,7 @@ export function initializeSimulation () {
 
       filtersCSSNode.nodeValue = filterValue
         ? `${
-            document.getElementById('Figma') ? 'iframe' : 'html'
+            window.location.pathname.startsWith('/figma') ? 'iframe' : 'html'
           }{-webkit-filter:${filterValue};filter:${filterValue};}`
         : ''
     },
@@ -562,7 +606,7 @@ export function initializeSimulation () {
   let fakeCursorInterval
   let lastHoveredElem
 
-  function shakeMousePosition (currentX, currentY, multiplier) {
+  function shakeMousePosition(currentX, currentY, multiplier) {
     const randomDirectionX = Math.random() * multiplier
     const randomDirectionY = Math.random() * multiplier
     const randomBoundary = 10 * Math.random() * multiplier
@@ -656,11 +700,11 @@ export function initializeSimulation () {
 }
 
 // functional utilities
-export function createBaseColor (hue, mode = LIGHT) {
+export function createBaseColor(hue, mode = LIGHT) {
   return hsluvToHex([hue, DEFAULT_SATURATION, ModeSettings[mode][LUMINANCE]])
 }
 
-export function createPalette (hue, mode) {
+export function createPalette(hue, mode) {
   return EmptyArray.map((_, i) =>
     createBaseColor((hue + (MAX_VALUE * i) / HUE_COUNT) % MAX_VALUE, mode)
   )
@@ -668,7 +712,7 @@ export function createPalette (hue, mode) {
 
 const LightModes = [LIGHT, LOW_CONTRAST_LIGHT, HIGH_CONTRAST_LIGHT, SPECTRUM]
 
-export function createShades (hue, mode = LIGHT) {
+export function createShades(hue, mode = LIGHT) {
   const luminanceScale = ModeSettings[mode][LUMINANCE_SCALE]
   const keyScale = ModeSettings[mode][KEY_SCALE] || DEFAULT_KEY_SCALE
 
@@ -683,11 +727,11 @@ export function createShades (hue, mode = LIGHT) {
   }, {})
 }
 
-export function getHue (color) {
+export function getHue(color) {
   return hexToHsluv(color)[0]
 }
 
-function createFilters () {
+function createFilters() {
   const divNode = document.createElement('div')
   divNode.style.height = 0
 
@@ -726,7 +770,146 @@ function createFilters () {
   document.body.appendChild(divNode)
 }
 
-function loadjQuery () {
+const titleClassName = 'fs-13 lh-16 capitalize fw-700'
+
+function SectionTitle() {
+  return (
+    <div className='mb-8 mt-12'>
+      <h3 className={titleClassName}>Cognition</h3>
+    </div>
+  )
+}
+
+// const schedule = rafSchd(hue =>
+//   // TODO may get stuck when use keyboard
+//   setTheme({
+//     [COLOR]: createBaseColor(hue)
+//   })
+// )
+
+export function PaletteSlider() {
+  const color = useColor()
+  const hue = getHue(color)
+
+  return (
+    <Slider
+      className='PaletteSlider'
+      max='359.99999999999999'
+      min='0'
+      // onChange={e => schedule(e.target.value)}
+      onChange={e => setTheme({ [COLOR]: createBaseColor(e.target.value) })}
+      themeKey={COLOR}
+      value={hue}
+    />
+  )
+}
+
+function RadioGroup({ themeKey, children }) {
+  const value = useThemeStore(state => state[themeKey])
+  const onChange = e => setTheme({ [themeKey]: e.target.value })
+
+  return (
+    <div aria-labelledby={themeKey} className='mb-12 mt-8' role='group'>
+      <div className='mb-8'>
+        <h3 className={titleClassName} id={themeKey}>
+          {themeKey.split('--').join(' ')}
+        </h3>
+      </div>
+      <div>
+        {Options[themeKey].map(option => {
+          const optionId = `theme-${themeKey}-${option}`
+
+          return (
+            <div key={option} className='mb-8'>
+              <input
+                checked={option === value}
+                className='Radio visually-hidden'
+                id={optionId}
+                name={themeKey}
+                onChange={onChange}
+                type='radio'
+                value={option}
+              />
+              <label
+                className='flex items-center relative capitalize fs-13 lh-16'
+                htmlFor={optionId}
+              >
+                {option.split('--').join(' ')}
+              </label>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+RadioGroup.propTypes = {
+  themeKey: PropTypes.oneOf(AllKeys).isRequired
+  // children: PropTypes.node
+}
+
+function Slider({ themeKey, className, ...props }) {
+  const value = useThemeStore(state => state[themeKey])
+  const label = themeKey.split('--').join(' ')
+
+  return (
+    <div className='mb-4 mt-8'>
+      <h3 className={titleClassName}>{label}</h3>
+      <input
+        aria-label={`Adjust ${label}.`}
+        className={joinStrings('Slider', className)}
+        onChange={e =>
+          setTheme({
+            [themeKey]: e.target.value
+          })
+        }
+        step='1'
+        type='range'
+        value={value}
+        {...props}
+      />
+    </div>
+  )
+}
+
+Slider.propTypes = {
+  max: PropTypes.string.isRequired,
+  min: PropTypes.string.isRequired,
+  themeKey: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  disabled: PropTypes.bool
+}
+
+function Switch({ themeKey }) {
+  const value = useThemeStore(state => state[themeKey])
+  const labelledBy = `${themeKey}-label`
+
+  return (
+    <div className='flex items-center justify-between mb-12'>
+      <span className='capitalize fs-13 lh-16' id={labelledBy}>
+        {themeKey.split('--').join(' ')}
+      </span>
+      <div className='inline-block'>
+        <input
+          aria-labelledby={labelledBy}
+          checked={value}
+          className='Switch visually-hidden'
+          id={themeKey}
+          onChange={e => setTheme({ [themeKey]: e.target.checked })}
+          type='checkbox'
+        />
+        <label className='flex items-center rounded' htmlFor={themeKey} />
+      </div>
+    </div>
+  )
+}
+
+Switch.propTypes = {
+  themeKey: PropTypes.string.isRequired
+}
+
+function loadjQuery() {
   const script = document.createElement('script')
   script.async = true
   script.defer = true
@@ -735,7 +918,7 @@ function loadjQuery () {
 }
 
 // hooks
-export function useColor () {
+export function useColor() {
   return useThemeStore(selectColor)
 }
 
@@ -747,59 +930,59 @@ export function useColor () {
 //   return useThemeStore(selectPalette)
 // }
 
-export function useDyslexia () {
+export function useDyslexia() {
   return useThemeStore(selectDyslexia)
 }
 
-export function useColorblind () {
+export function useColorblind() {
   return useThemeStore(selectColorblind)
 }
 
-export function useZoom () {
+export function useZoom() {
   return useThemeStore(selectZoom)
 }
 
 export default useThemeStore
 
 // selectors
-function selectColor (state) {
+function selectColor(state) {
   return state[COLOR]
 }
 
-function selectVibrancy (state) {
+function selectVibrancy(state) {
   return state[VIBRANCY]
 }
 
-function selectMode (state) {
+function selectMode(state) {
   return state[MODE]
 }
 
-function selectSpacing (state) {
+function selectSpacing(state) {
   return state[SPACING]
 }
 
-function selectDyslexia (state) {
+function selectDyslexia(state) {
   return state[DYSLEXIA]
 }
 
-function selectColorblind (state) {
+function selectColorblind(state) {
   return state[COLORBLIND]
 }
 
-function selectDevice (state) {
+function selectDevice(state) {
   return state[DEVICE]
 }
 
-function selectZoom (state) {
+function selectZoom(state) {
   return state[ZOOM]
 }
 
 // DOM utilities
-function removeChildIfExists (parentNode, childNode) {
+function removeChildIfExists(parentNode, childNode) {
   parentNode.contains(childNode) && parentNode.removeChild(childNode)
 }
 
-function createCSSVarsNode (vars) {
+function createCSSVarsNode(vars) {
   return (
     Object.entries(vars).reduce((style, [key, value]) => {
       style += `--${key}:${value};`
@@ -842,7 +1025,7 @@ const InteractiveElements = [
 //   )
 // }
 
-function isFocusable (elem) {
+function isFocusable(elem) {
   const tagName = elem.tagName
 
   return (
@@ -853,7 +1036,7 @@ function isFocusable (elem) {
 }
 
 // zustand utilities
-function cleanUp (listener) {
+function cleanUp(listener) {
   let cleanup
 
   return (...args) => {
@@ -865,7 +1048,7 @@ function cleanUp (listener) {
 }
 
 // add runEffect, which is similar to React's useLayoutEffect
-function withEffect (initial) {
+function withEffect(initial) {
   return (set, get, api) => {
     api.runEffect = (listener, ...rest) =>
       api.subscribe(cleanUp(listener), ...rest)
@@ -876,7 +1059,7 @@ function withEffect (initial) {
   }
 }
 
-function shallow (a, b) {
+function shallow(a, b) {
   for (const i in a) {
     if (!Object.is(a[i], b[i])) return false
   }
