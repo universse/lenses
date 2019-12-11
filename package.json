@@ -13,7 +13,7 @@
     "@tensorflow/tfjs": "^1.4.0",
     "chroma-js": "^2.0.6",
     "framer": "^1.1.5",
-    "framer-motion": "^1.16.18",
+    "framer-motion": "1.6.16",
     "gatsby": "^2.18.10",
     "gatsby-image": "^2.2.36",
     "gatsby-plugin-catch-links": "^2.1.21",
