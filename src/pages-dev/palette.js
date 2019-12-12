@@ -20,7 +20,7 @@ import { getColorContrastWithFilter } from 'utils/color'
 const WHITE = '#fff'
 const BLACK = '#000'
 
-export default function PalettePage() {
+export default function PalettePage () {
   // const palette = usePalette()
   const colorblind = useColorblind()
   const filterValues = Colorblind.FilterValues[colorblind]

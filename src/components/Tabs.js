@@ -13,7 +13,7 @@ import {
 } from 'hooks/useThemeStore'
 import classNames from 'utils/classNames'
 
-function renderControls(controls) {
+function renderControls (controls) {
   return controls.map((Control, i) => {
     if (typeof Control === 'function') return <Control key={Control} />
 
@@ -22,11 +22,11 @@ function renderControls(controls) {
   })
 }
 
-export function Theming() {
+export function Theming () {
   return renderControls(ThemingControls)
 }
 
-export function Simulation({ controls = DefaultSimulationControls }) {
+export function Simulation ({ controls = DefaultSimulationControls }) {
   useEffect(() => () => resetSimulation(), [])
 
   return renderControls(controls)
@@ -38,7 +38,7 @@ Simulation.propTypes = {
 
 const LensesGroupName = 'lenses'
 
-export function Lenses({ lenses = AllLenses }) {
+export function Lenses ({ lenses = AllLenses }) {
   return (
     <div aria-labelledby={LensesGroupName} className='mt-12' role='group'>
       <div className='mb-8 visually-hidden'>
@@ -82,7 +82,7 @@ Lenses.propTypes = {
 const TAB = 'tab'
 const TAB_PANEL = 'tabpanel'
 
-export default function Tabs({ tabs }) {
+export default function Tabs ({ tabs }) {
   const id = useId()
   const [currentTabIndex, setCurrentTabIndex] = useState(0)
 

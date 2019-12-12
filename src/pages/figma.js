@@ -33,7 +33,7 @@ const tabs = [
   }
 ]
 
-export default function FigmaPage({ location: { search } }) {
+export default function FigmaPage ({ location: { search } }) {
   const [url, setUrl] = useState(() => new URLSearchParams(search).get('url'))
   const debouncedUrl = useDebouncedValue(url, 500)
   const { shortTitle } = useSiteMetadata()

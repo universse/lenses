@@ -5,7 +5,7 @@ import Logo from './Logo'
 
 export default function Header () {
   return (
-    <header>
+    <header style={{ height: '6rem' }}>
       <div>
         <Link to='/'>
           <Logo />

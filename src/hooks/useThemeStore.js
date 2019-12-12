@@ -299,20 +299,20 @@ const [useThemeStore, { setState, subscribe, runEffect }] = create(
   withEffect(DefaultSimulation)
 )
 
-export const setTheme = (function() {
+export const setTheme = (function () {
   let eventTimeout
 
-  return function(theme) {
+  return function (theme) {
     clearTimeout(eventTimeout)
     setState(theme)
     eventTimeout = setTimeout(() => window.___log('set theme', theme), 650)
   }
 })()
 
-export const setLense = (function() {
+export const setLense = (function () {
   let eventTimeout
 
-  return function(lense) {
+  return function (lense) {
     clearTimeout(eventTimeout)
     setState({
       ...DefaultSimulation,
@@ -327,7 +327,7 @@ export const resetSimulation = () => setState(DefaultSimulation)
 
 let styleNode
 
-export function initializeTheming() {
+export function initializeTheming () {
   styleNode = document.body.appendChild(document.createElement('style'))
 
   // COLOR
@@ -400,7 +400,7 @@ export function initializeTheming() {
     .catch(e => setState(DefaultTheming))
 }
 
-export function initializeSimulation() {
+export function initializeSimulation () {
   // ZOOM
   let lastZoom = window.devicePixelRatio
   let originalDevicePixel
@@ -442,6 +442,9 @@ export function initializeSimulation() {
 
   // Filters
   createFilters()
+
+  const filtersCSSNode = styleNode.appendChild(document.createTextNode(''))
+
   const [ghostingSourceBlur, ghostingOverlayBlur] = document.querySelectorAll(
     `#${GHOSTING} feGaussianBlur`
   )
@@ -452,8 +455,7 @@ export function initializeSimulation() {
 
   const ghostingOffset = document.querySelector(`#${GHOSTING} feOffset`)
 
-  const filtersCSSNode = styleNode.appendChild(document.createTextNode(''))
-  subscribe(
+  runEffect(
     ([blur, brightness, colorblind, contrast, ghosting, opacity, zoom]) => {
       let finalBlur = 0
 
@@ -501,11 +503,17 @@ export function initializeSimulation() {
         opacity < DefaultSimulation[OPACITY] && `opacity(${opacity}%)`
       )
 
-      filtersCSSNode.nodeValue = filterValue
-        ? `${
-            window.location.pathname.startsWith('/figma') ? 'iframe' : 'html'
-          }{-webkit-filter:${filterValue};filter:${filterValue};}`
-        : ''
+      const element = window.location.pathname.startsWith('/figma')
+        ? 'iframe'
+        : 'html'
+
+      filtersCSSNode.nodeValue = `${element}{-webkit-filter:${filterValue} sepia(0);filter:${filterValue} sepia(0);}`
+
+      const timeoutId = setTimeout(() => {
+        filtersCSSNode.nodeValue = `${element}{-webkit-filter:${filterValue};filter:${filterValue};}`
+      }, 5)
+
+      return () => clearTimeout(timeoutId)
     },
     state => [
       parseFloat(state[BLUR]),
@@ -606,7 +614,7 @@ export function initializeSimulation() {
   let fakeCursorInterval
   let lastHoveredElem
 
-  function shakeMousePosition(currentX, currentY, multiplier) {
+  function shakeMousePosition (currentX, currentY, multiplier) {
     const randomDirectionX = Math.random() * multiplier
     const randomDirectionY = Math.random() * multiplier
     const randomBoundary = 10 * Math.random() * multiplier
@@ -700,11 +708,11 @@ export function initializeSimulation() {
 }
 
 // functional utilities
-export function createBaseColor(hue, mode = LIGHT) {
+export function createBaseColor (hue, mode = LIGHT) {
   return hsluvToHex([hue, DEFAULT_SATURATION, ModeSettings[mode][LUMINANCE]])
 }
 
-export function createPalette(hue, mode) {
+export function createPalette (hue, mode) {
   return EmptyArray.map((_, i) =>
     createBaseColor((hue + (MAX_VALUE * i) / HUE_COUNT) % MAX_VALUE, mode)
   )
@@ -712,7 +720,7 @@ export function createPalette(hue, mode) {
 
 const LightModes = [LIGHT, LOW_CONTRAST_LIGHT, HIGH_CONTRAST_LIGHT, SPECTRUM]
 
-export function createShades(hue, mode = LIGHT) {
+export function createShades (hue, mode = LIGHT) {
   const luminanceScale = ModeSettings[mode][LUMINANCE_SCALE]
   const keyScale = ModeSettings[mode][KEY_SCALE] || DEFAULT_KEY_SCALE
 
@@ -727,11 +735,11 @@ export function createShades(hue, mode = LIGHT) {
   }, {})
 }
 
-export function getHue(color) {
+export function getHue (color) {
   return hexToHsluv(color)[0]
 }
 
-function createFilters() {
+function createFilters () {
   const divNode = document.createElement('div')
   divNode.style.height = 0
 
@@ -754,7 +762,7 @@ function createFilters() {
           </feComponentTransfer>
           <feGaussianBlur in='SourceGraphic' stdDeviation='0' />
           <feOffset dx='0' dy='0' />
-          <feComponentTransfer result='overlay'>
+          <feComponentTransfer>
             <feFuncA slope='0' type='linear' />
           </feComponentTransfer>
           <feBlend in2='source' mode='multiply' />
@@ -772,7 +780,7 @@ function createFilters() {
 
 const titleClassName = 'fs-13 lh-16 capitalize fw-700'
 
-function SectionTitle() {
+function SectionTitle () {
   return (
     <div className='mb-8 mt-12'>
       <h3 className={titleClassName}>Cognition</h3>
@@ -787,7 +795,7 @@ function SectionTitle() {
 //   })
 // )
 
-export function PaletteSlider() {
+export function PaletteSlider () {
   const color = useColor()
   const hue = getHue(color)
 
@@ -804,7 +812,7 @@ export function PaletteSlider() {
   )
 }
 
-function RadioGroup({ themeKey, children }) {
+function RadioGroup ({ themeKey, children }) {
   const value = useThemeStore(state => state[themeKey])
   const onChange = e => setTheme({ [themeKey]: e.target.value })
 
@@ -849,7 +857,7 @@ RadioGroup.propTypes = {
   // children: PropTypes.node
 }
 
-function Slider({ themeKey, className, ...props }) {
+function Slider ({ themeKey, className, ...props }) {
   const value = useThemeStore(state => state[themeKey])
   const label = themeKey.split('--').join(' ')
 
@@ -881,7 +889,7 @@ Slider.propTypes = {
   disabled: PropTypes.bool
 }
 
-function Switch({ themeKey }) {
+function Switch ({ themeKey }) {
   const value = useThemeStore(state => state[themeKey])
   const labelledBy = `${themeKey}-label`
 
@@ -909,7 +917,7 @@ Switch.propTypes = {
   themeKey: PropTypes.string.isRequired
 }
 
-function loadjQuery() {
+function loadjQuery () {
   const script = document.createElement('script')
   script.async = true
   script.defer = true
@@ -918,7 +926,7 @@ function loadjQuery() {
 }
 
 // hooks
-export function useColor() {
+export function useColor () {
   return useThemeStore(selectColor)
 }
 
@@ -930,59 +938,59 @@ export function useColor() {
 //   return useThemeStore(selectPalette)
 // }
 
-export function useDyslexia() {
+export function useDyslexia () {
   return useThemeStore(selectDyslexia)
 }
 
-export function useColorblind() {
+export function useColorblind () {
   return useThemeStore(selectColorblind)
 }
 
-export function useZoom() {
+export function useZoom () {
   return useThemeStore(selectZoom)
 }
 
 export default useThemeStore
 
 // selectors
-function selectColor(state) {
+function selectColor (state) {
   return state[COLOR]
 }
 
-function selectVibrancy(state) {
+function selectVibrancy (state) {
   return state[VIBRANCY]
 }
 
-function selectMode(state) {
+function selectMode (state) {
   return state[MODE]
 }
 
-function selectSpacing(state) {
+function selectSpacing (state) {
   return state[SPACING]
 }
 
-function selectDyslexia(state) {
+function selectDyslexia (state) {
   return state[DYSLEXIA]
 }
 
-function selectColorblind(state) {
+function selectColorblind (state) {
   return state[COLORBLIND]
 }
 
-function selectDevice(state) {
+function selectDevice (state) {
   return state[DEVICE]
 }
 
-function selectZoom(state) {
+function selectZoom (state) {
   return state[ZOOM]
 }
 
 // DOM utilities
-function removeChildIfExists(parentNode, childNode) {
+function removeChildIfExists (parentNode, childNode) {
   parentNode.contains(childNode) && parentNode.removeChild(childNode)
 }
 
-function createCSSVarsNode(vars) {
+function createCSSVarsNode (vars) {
   return (
     Object.entries(vars).reduce((style, [key, value]) => {
       style += `--${key}:${value};`
@@ -1025,7 +1033,7 @@ const InteractiveElements = [
 //   )
 // }
 
-function isFocusable(elem) {
+function isFocusable (elem) {
   const tagName = elem.tagName
 
   return (
@@ -1036,7 +1044,7 @@ function isFocusable(elem) {
 }
 
 // zustand utilities
-function cleanUp(listener) {
+function cleanUp (listener) {
   let cleanup
 
   return (...args) => {
@@ -1048,7 +1056,7 @@ function cleanUp(listener) {
 }
 
 // add runEffect, which is similar to React's useLayoutEffect
-function withEffect(initial) {
+function withEffect (initial) {
   return (set, get, api) => {
     api.runEffect = (listener, ...rest) =>
       api.subscribe(cleanUp(listener), ...rest)
@@ -1059,7 +1067,7 @@ function withEffect(initial) {
   }
 }
 
-function shallow(a, b) {
+function shallow (a, b) {
   for (const i in a) {
     if (!Object.is(a[i], b[i])) return false
   }

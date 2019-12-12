@@ -178,7 +178,7 @@ const icons = {
   )
 }
 
-export default function Icon({ filled = false, icon, size, label }) {
+export default function Icon ({ filled = false, icon, size, label }) {
   if (!icons[icon]) throw new Error('Unknown icon.')
 
   return (

@@ -31,6 +31,11 @@
   color: var(--text-contrast);
 }
 
+html,
+iframe {
+  will-change: filter;
+}
+
 input[type='email'],
 input[type='text'],
 input[type='url'] {
@@ -82,7 +87,6 @@ input[type='url'] {
 }
 
 header {
-  height: 6rem;
   width: 100%;
   z-index: 200;
 

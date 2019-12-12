@@ -1,14 +1,15 @@
+-- launch figma stuffs
+
+-- tweak lenses + more empathetic // design visualization
+
+-- backlog
 glare to outdoor environment https://css-tricks.com/look-svg-light-source-filters/
-launch figma stuffs
+retinal detachment
+diabetic retinopathy + blur https://yoksel.github.io/svg-filters/#/presets/colored-stripes-vertical
+open proto
+mousemove iframe
 
-tweak lenses + more empathetic // design visualization
-
-<!-- retinal detachment -->
-<!-- diabetic retinopathy + blur https://yoksel.github.io/svg-filters/#/presets/colored-stripes-vertical -->
-
-<!-- open proto -->
-<!-- mousemove iframe -->
-
+-- linter
 export to stylelint rules
 design linters
 automated contrast check for colorblind
