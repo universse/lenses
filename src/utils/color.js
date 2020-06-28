@@ -6,22 +6,31 @@ export {
   getColorContrastWithFilter
 }
 
-function toHexKey (hex) {
+function toHexKey(hex) {
   hex = toHex6(hex)
   return isGray(hex) ? '000000' : hex
 }
 
 const HEX_REGEXP = /^#?([0-9a-f]{3}){1,2}$/i
 
-function isValidHex (color) {
+function isValidHex(color) {
   return HEX_REGEXP.test(color)
 }
 
-function getColorContrast (hex1, hex2) {
+console.log(
+  rgbToHex(
+    rgbWithFilter(
+      hexToRgb('#42dead'),
+      '0.299,0.587,0.114,0,0 0.299,0.587,0.114,0,0 0.299,0.587,0.114,0,0 0,0,0,1,0'
+    )
+  )
+)
+
+function getColorContrast(hex1, hex2) {
   return getColorContrastWithFilter(hex1, hex2)
 }
 
-function getColorContrastWithFilter (hex1, hex2, filterValues = '') {
+function getColorContrastWithFilter(hex1, hex2, filterValues = '') {
   if (filterValues) {
     hex1 = rgbToHex(rgbWithFilter(hexToRgb(hex1), filterValues))
     hex2 = rgbToHex(rgbWithFilter(hexToRgb(hex2), filterValues))
@@ -33,7 +42,7 @@ function getColorContrastWithFilter (hex1, hex2, filterValues = '') {
   return Math.max(l1, l2) / Math.min(l1, l2)
 }
 
-function hexToRgb (hex) {
+function hexToRgb(hex) {
   if (!isValidHex(hex)) throw new Error(`Invalid hex ${hex}.`)
 
   hex = toHex6(hex)
@@ -45,7 +54,7 @@ function hexToRgb (hex) {
   ]
 }
 
-function toHex6 (hex) {
+function toHex6(hex) {
   hex = hex.replace('#', '')
 
   hex.length === 3 && (hex = hex.replace(/([0-9a-f])/g, '$1$1'))
@@ -53,16 +62,16 @@ function toHex6 (hex) {
   return hex.toLowerCase()
 }
 
-function isGray (hex) {
+function isGray(hex) {
   return new Set(hex).size === 1
 }
 
-function luminanceX (x) {
+function luminanceX(x) {
   x /= 255
   return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4)
 }
 
-function rgbToLuminance ([r, g, b]) {
+function rgbToLuminance([r, g, b]) {
   r = luminanceX(r)
   g = luminanceX(g)
   b = luminanceX(b)
@@ -70,7 +79,7 @@ function rgbToLuminance ([r, g, b]) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b
 }
 
-function luminance (hex) {
+function luminance(hex) {
   return rgbToLuminance(hexToRgb(hex))
 }
 
@@ -90,14 +99,14 @@ function luminance (hex) {
 //   }
 // }
 
-export function clamp ({ value, max = +Infinity, min = -Infinity }) {
+export function clamp({ value, max = +Infinity, min = -Infinity }) {
   if (max < min) {
     throw new Error('Max value should be greater than min value.')
   }
   return Math.max(min, Math.min(max, value))
 }
 
-function rgbWithFilter ([r, g, b, a = 1], filterValues) {
+function rgbWithFilter([r, g, b, a = 1], filterValues) {
   return filterValues.split(' ').map((row, i) => {
     const columns = row.split(',')
     const value =
@@ -115,11 +124,11 @@ function rgbWithFilter ([r, g, b, a = 1], filterValues) {
   })
 }
 
-function xToHex (x) {
+function xToHex(x) {
   const hex = x.toString(16)
   return hex.length === 1 ? `0${hex}` : hex
 }
 
-function rgbToHex ([r, g, b, a]) {
+function rgbToHex([r, g, b, a]) {
   return `#${xToHex(r)}${xToHex(g)}${xToHex(b)}`
 }

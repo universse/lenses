@@ -1,7 +1,6 @@
 @import 'theme';
 @import 'typography';
 @import 'variables';
-@import 'reset';
 
 @import 'carousel';
 @import 'figma';
@@ -29,6 +28,13 @@
 ::selection {
   background-color: var(--accent);
   color: var(--text-contrast);
+}
+
+body {
+  font-family: RobotoMono, system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
+    'Droid Sans', 'Helvetica Neue', sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 html,
@@ -276,12 +282,4 @@ time {
   font-size: 1.1875rem;
   line-height: 1.75rem;
   margin: 0.25rem 0 4rem;
-}
-
-strong {
-  font-weight: 700;
-}
-
-em {
-  font-style: italic;
 }

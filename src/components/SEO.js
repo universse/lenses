@@ -4,49 +4,49 @@ import Helmet from 'react-helmet'
 
 import useSiteMetadata from 'hooks/useSiteMetadata'
 
-function SEO ({ description, lang = 'en', meta = [], title }) {
+function SEO({ description, lang = 'en', meta = [], title }) {
   const siteMetadata = useSiteMetadata()
   const metaDescription = description || siteMetadata.description
 
   return (
     <Helmet
       htmlAttributes={{
-        lang
+        lang,
       }}
       meta={[
         {
           name: 'description',
-          content: metaDescription
+          content: metaDescription,
         },
         {
           property: 'og:title',
-          content: title || siteMetadata.title
+          content: title || siteMetadata.title,
         },
         {
           property: 'og:description',
-          content: metaDescription
+          content: metaDescription,
         },
         {
           property: 'og:type',
-          content: 'website'
+          content: 'website',
         },
         {
           name: 'twitter:card',
-          content: 'summary'
+          content: 'summary',
         },
         {
           name: 'twitter:title',
-          content: title || siteMetadata.title
+          content: title || siteMetadata.title,
         },
         {
           name: 'twitter:description',
-          content: metaDescription
+          content: metaDescription,
         },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
         {
           name: 'apple-mobile-web-app-status-bar-style',
-          content: 'default'
-        }
+          content: 'default',
+        },
       ].concat(meta)}
       title={
         title
@@ -63,5 +63,5 @@ SEO.propTypes = {
   description: PropTypes.string,
   lang: PropTypes.string,
   meta: PropTypes.array,
-  title: PropTypes.string
+  title: PropTypes.string,
 }

@@ -6,25 +6,25 @@ module.exports = ({ actions: { createPage, createRedirect } }) => {
     createRedirect({
       fromPath: '/fire/*',
       toPath: `${process.env.FIREBASE_FUNCTIONS}/:splat`,
-      statusCode: 200
+      statusCode: 200,
     })
 
     createRedirect({
       fromPath: '/*',
       toPath: '/figma',
-      statusCode: 200
+      statusCode: 200,
     })
   } else {
     createRedirect({
       fromPath: '/fire/(.*)',
       toPath: `${process.env.FIREBASE_FUNCTIONS}/$1`,
-      statusCode: 200
+      statusCode: 200,
     })
 
     createRedirect({
       fromPath: '/(.*)',
       toPath: '/figma',
-      statusCode: 200
+      statusCode: 200,
     })
   }
 
